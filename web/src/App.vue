@@ -23,7 +23,7 @@ export default{
 /* 写css */
 body {
   /* 页面背景 */
-  background-image: url("@/assets/background.jpg");
+  background-image: url("@/assets/images/background.jpg");
   background-size: cover;
 }
 </style>

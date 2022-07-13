@@ -1,0 +1,42 @@
+// 游戏地图
+<template>
+    <div ref="parent" class="gamemap">
+        <!-- canvas 画布 -->
+        <canvas ref="canvas" ></canvas>
+    </div>
+</template>
+
+
+<script>
+    import {GameMap} from "@/assets/scripts/GameMap"
+    import {ref, onMounted} from 'vue'
+
+    export default{
+        setup(){
+            let parent = ref(null);
+            let canvas = ref(null);
+            // 当组件挂载完之后，需要执行
+            onMounted(()=>{
+                new GameMap(canvas.value.getContext('2d'),parent.value)
+            })
+
+            return { // 返回之后才能在template中用
+                parent,
+                canvas
+            }
+        }
+    }
+</script>
+
+<style scoped>
+    div.gamemap{
+        /* 设置和父元素(即游戏区域)等长 */
+        width: 100%;
+        height: 100%;
+        display: flex;
+        /* 水平居中 */
+        justify-content: center;
+        /* 竖直方向居中 */
+        align-items: center; 
+    }
+</style>
