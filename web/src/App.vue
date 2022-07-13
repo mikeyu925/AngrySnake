@@ -1,36 +1,19 @@
 <template>
-  <div>
-    <div>Bot昵称:{{bot_name}}</div>
-    <div>Bot战力:{{bot_rating}}</div>
-
-  </div>
+  <navbar />
+  <!-- router-view 可以自动根据网址来变化，在router文件夹下的index.js定义 -->
   <router-view/>
 </template>
 
 
 <script>
+import Navbar from './components/NavBar.vue'
+// 导入bootstrap的依赖
+import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/js/bootstrap"
 // js
-import $ from 'jquery';
-import {ref} from 'vue';
 export default{
-  name:"App",
-  setup: () => {
-    let bot_name = ref("");
-    let bot_rating = ref("");
-
-    $.ajax({
-      url:"http://127.0.0.1:6969/pk/getbotinfo",
-      type: "get",
-      success: resp =>{
-        bot_name.value = resp.name;
-        bot_rating.value = resp.rating;
-      }
-    });
-    
-    return {
-      bot_name,
-      bot_rating
-    }
+  components:{
+    Navbar
   }
 }
 </script>
@@ -39,6 +22,7 @@ export default{
 <style>
 /* 写css */
 body {
+  /* 页面背景 */
   background-image: url("@/assets/background.jpg");
   background-size: cover;
 }
