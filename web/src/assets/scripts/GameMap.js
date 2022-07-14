@@ -1,6 +1,7 @@
 // 如果是export 需要用 {} 括起来，如果是export default 不需要{},每个文件只能由一个default
 // GameMap 游戏地图组件
 import { GameObject } from "./GameObject";
+import { Snake } from "./Snake";
 import { Wall } from "./Wall";
 
 
@@ -11,12 +12,17 @@ export class GameMap extends GameObject {
         this.ctx = ctx;
         this.parent = parent;
 
-        this.L = 0; // 格子的长度
+        this.L = 0; // 格子的长度 ==> 会根据页面长宽动态改变
         this.rows = 13; // 游戏地图的行数(行方向格子数) 
-        this.cols = 13; // 游戏地图的列数(列方向格子数)
+        this.cols = 14; // 游戏地图的列数(列方向格子数)
 
         this.walls = []; // 存储墙的列表
         this.inner_wall_count = 30; // 内部障碍物数量
+
+        this.snakes = [
+            new Snake({ id: 0, color: "#4876EC", r: this.rows - 2, c: 1 }, this),
+            new Snake({ id: 1, color: "#F94848", r: 1, c: this.cols - 2 }, this),
+        ]
     }
 
     check_connectivity(g, sx, sy, tx, ty) { // 深度优先搜索 判断是否联通
@@ -50,7 +56,7 @@ export class GameMap extends GameObject {
         for (let c = 0; c < this.cols; c++) {
             has_wall[0][c] = has_wall[this.rows - 1][c] = true;
         }
-        // 创建随机内部障碍物
+        // 创建随机内部障碍物 ==> 优化：采用中心对称
         for (let i = 0; i < this.inner_wall_count / 2; i++) {
             let r = -1;
             let c = -1;
@@ -59,7 +65,8 @@ export class GameMap extends GameObject {
                 c = parseInt(Math.random() * this.cols);
             } while (has_wall[r][c] == true || (r == this.rows - 2 && c == 1) || (r == 1 && c == this.cols - 2));
             has_wall[r][c] = true;
-            has_wall[c][r] = true;
+            // has_wall[c][r] = true; // 对角线对称 
+            has_wall[this.rows - 1 - r][this.cols - 1 - c] = true;
         }
 
         // 判断两条蛇是否更够联通
@@ -78,12 +85,29 @@ export class GameMap extends GameObject {
         return true;
     }
 
+    add_listening_events() {
+        this.ctx.canvas.focus(); // 对焦
+        const [snake0, snake1] = this.snakes; // 获取两条蛇
+        this.ctx.canvas.addEventListener("keydown", e => {
+            // 上右下左
+            if (e.key === 'w') snake0.set_direction(0);
+            else if (e.key === 'd') snake0.set_direction(1);
+            else if (e.key === 's') snake0.set_direction(2);
+            else if (e.key === 'a') snake0.set_direction(3);
+            else if (e.key === 'ArrowUp') snake1.set_direction(0);
+            else if (e.key === 'ArrowRight') snake1.set_direction(1);
+            else if (e.key === 'ArrowDown') snake1.set_direction(2);
+            else if (e.key === 'ArrowLeft') snake1.set_direction(3);
+        });
+    }
+
     start() {
         // while(!this.create_walls()); // 不建议使用死循环
         for (let i = 0; i < 10000; i++) {
             if (this.create_walls())
                 break;
         }
+        this.add_listening_events();
     }
 
     update_size() { // 在每一帧更新边长
@@ -94,8 +118,26 @@ export class GameMap extends GameObject {
         this.ctx.canvas.height = this.L * this.rows;
     }
 
+    check_ready() { // 判断两条蛇是否都准备好下一回合
+        for (const snake of this.snakes) {
+            // 如果蛇当前不是静止 或者 没有方向,则返回false
+            if (snake.status !== "idle") return false;
+            if (snake.direction === -1) return false;
+        }
+        return true;
+    }
+
+    next_step() { // 让两条蛇进入下一回合
+        for (const snake of this.snakes) {
+            snake.next_step();
+        }
+    }
+
     update() {
         this.update_size(); // 更新画布边长
+        if (this.check_ready()) {
+            this.next_step(); // 两条蛇进入下一步
+        }
         this.render();
     }
 

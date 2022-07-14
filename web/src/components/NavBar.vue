@@ -1,4 +1,5 @@
 // 每个组件文件名必须有两个大写
+// 导航栏 组件BavBar
 <template>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container"> 
