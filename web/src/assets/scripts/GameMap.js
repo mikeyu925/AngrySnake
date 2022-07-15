@@ -17,12 +17,12 @@ export class GameMap extends GameObject {
         this.cols = 14; // 游戏地图的列数(列方向格子数)
 
         this.walls = []; // 存储墙的列表
-        this.inner_wall_count = 30; // 内部障碍物数量
+        this.inner_wall_count = 20; // 内部障碍物数量
 
         this.snakes = [
             new Snake({ id: 0, color: "#4876EC", r: this.rows - 2, c: 1 }, this),
             new Snake({ id: 1, color: "#F94848", r: 1, c: this.cols - 2 }, this),
-        ]
+        ];
     }
 
     check_connectivity(g, sx, sy, tx, ty) { // 深度优先搜索 判断是否联通
@@ -63,14 +63,15 @@ export class GameMap extends GameObject {
             do {
                 r = parseInt(Math.random() * this.rows);
                 c = parseInt(Math.random() * this.cols);
-            } while (has_wall[r][c] == true || (r == this.rows - 2 && c == 1) || (r == 1 && c == this.cols - 2));
+            } while (has_wall[r][c] == true || has_wall[this.rows - 1 - r][this.cols - 1 - c] == true || (r == this.rows - 2 && c == 1) || (r == 1 && c == this.cols - 2));
             has_wall[r][c] = true;
+            has_wall[this.rows - 1 - r][this.cols - 1 - c] = true; // 中心对称
             // has_wall[c][r] = true; // 对角线对称 
-            has_wall[this.rows - 1 - r][this.cols - 1 - c] = true;
         }
 
         // 判断两条蛇是否更够联通
         const copy_g = JSON.parse(JSON.stringify(has_wall)); // 深度拷贝
+        // 如果不连通，直接返回false
         if (!this.check_connectivity(copy_g, this.rows - 2, 1, 1, this.cols - 2)) return false;
 
         // 将墙添加至存储墙的列表
@@ -85,9 +86,9 @@ export class GameMap extends GameObject {
         return true;
     }
 
-    add_listening_events() {
-        this.ctx.canvas.focus(); // 对焦
-        const [snake0, snake1] = this.snakes; // 获取两条蛇
+    add_listening_events() { // 读取用户输入
+        this.ctx.canvas.focus(); // 聚焦
+        const [snake0, snake1] = this.snakes; // 获取两条蛇对象
         this.ctx.canvas.addEventListener("keydown", e => {
             // 上右下左
             if (e.key === 'w') snake0.set_direction(0);
@@ -101,10 +102,10 @@ export class GameMap extends GameObject {
         });
     }
 
-    start() {
+    start() { // 只执行一次
         // while(!this.create_walls()); // 不建议使用死循环
         for (let i = 0; i < 10000; i++) {
-            if (this.create_walls())
+            if (this.create_walls()) // 创建墙
                 break;
         }
         this.add_listening_events();
@@ -121,7 +122,7 @@ export class GameMap extends GameObject {
     check_ready() { // 判断两条蛇是否都准备好下一回合
         for (const snake of this.snakes) {
             // 如果蛇当前不是静止 或者 没有方向,则返回false
-            if (snake.status !== "idle") return false;
+            if (snake.status !== "idle") return false; // 静止说明准备好了下一次移动
             if (snake.direction === -1) return false;
         }
         return true;
@@ -135,10 +136,10 @@ export class GameMap extends GameObject {
 
     update() {
         this.update_size(); // 更新画布边长
-        if (this.check_ready()) {
+        if (this.check_ready()) { // 如果两条蛇都准备好了
             this.next_step(); // 两条蛇进入下一步
         }
-        this.render();
+        this.render(); // 渲染
     }
 
     render() { // 渲染函数

@@ -1,5 +1,5 @@
 <template>
-  <navbar />
+  <Navbar />
   <!-- router-view 可以自动根据网址来变化，在router文件夹下的index.js定义 -->
   <router-view/>
 </template>
