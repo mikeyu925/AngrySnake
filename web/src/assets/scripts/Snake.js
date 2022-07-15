@@ -35,7 +35,7 @@ export class Snake extends GameObject {
 
     next_step() { // 获取蛇的下一步状态
         const d = this.direction; // 获取方向
-        this.next_cell = new Cell(this.cells[0].r + this.dr[d], this.cells[0] + this.dc[d]);
+        this.next_cell = new Cell(this.cells[0].r + this.dr[d], this.cells[0].c + this.dc[d]);
         this.direction = -1; // 清空方向
         this.status = "move"; // 变为移动状态
         this.step++;

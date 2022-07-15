@@ -26,9 +26,8 @@ export class GameMap extends GameObject {
     }
 
     check_connectivity(g, sx, sy, tx, ty) { // 深度优先搜索 判断是否联通
-        if (sx == tx && sy == ty) {
-            return true;
-        }
+        if (sx == tx && sy == ty) return true;
+
         g[sx][sy] = true;
         let dx = [-1, 0, 1, 0],
             dy = [0, 1, 0, -1];
@@ -86,11 +85,11 @@ export class GameMap extends GameObject {
         return true;
     }
 
-    add_listening_events() { // 读取用户输入
-        this.ctx.canvas.focus(); // 聚焦
-        const [snake0, snake1] = this.snakes; // 获取两条蛇对象
+    add_listening_events() {
+        this.ctx.canvas.focus();
+
+        const [snake0, snake1] = this.snakes;
         this.ctx.canvas.addEventListener("keydown", e => {
-            // 上右下左
             if (e.key === 'w') snake0.set_direction(0);
             else if (e.key === 'd') snake0.set_direction(1);
             else if (e.key === 's') snake0.set_direction(2);
@@ -102,9 +101,10 @@ export class GameMap extends GameObject {
         });
     }
 
+
     start() { // 只执行一次
         // while(!this.create_walls()); // 不建议使用死循环
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 1000; i++) {
             if (this.create_walls()) // 创建墙
                 break;
         }
@@ -121,8 +121,7 @@ export class GameMap extends GameObject {
 
     check_ready() { // 判断两条蛇是否都准备好下一回合
         for (const snake of this.snakes) {
-            // 如果蛇当前不是静止 或者 没有方向,则返回false
-            if (snake.status !== "idle") return false; // 静止说明准备好了下一次移动
+            if (snake.status !== "idle") return false;
             if (snake.direction === -1) return false;
         }
         return true;

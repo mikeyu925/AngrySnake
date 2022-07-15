@@ -1,10 +1,10 @@
 // 游戏地图
 <template>
     <div ref="parent" class="gamemap">
-        <!-- canvas 画布 tabindex = "0" 使得用户可以输入-->
         <canvas ref="canvas" tabindex="0"></canvas>
     </div>
 </template>
+
 
 
 <script>
