@@ -145,6 +145,7 @@ export class Snake extends GameObject {
         // 画左右眼睛
         if (this.status === "die") { // 如果蛇死了，设置颜色为白色
             for (let i = 0; i < 2; i++) {
+                // 计算眼睛偏移量
                 const eye_x = L * (this.cells[0].x + this.eye_dx[this.eye_direction][i] * 0.25);
                 const eye_y = L * (this.cells[0].y + this.eye_dy[this.eye_direction][i] * 0.25);
 
@@ -159,15 +160,16 @@ export class Snake extends GameObject {
             }
         } else {
             for (let i = 0; i < 2; i++) {
+                // 计算眼睛偏移量
                 const eye_x = L * (this.cells[0].x + this.eye_dx[this.eye_direction][i] * 0.25);
                 const eye_y = L * (this.cells[0].y + this.eye_dy[this.eye_direction][i] * 0.25);
 
-                ctx.fillStyle = "white";
+                ctx.fillStyle = "white"; // 眼白
                 ctx.beginPath();
                 ctx.arc(eye_x, eye_y, L * 0.1, 0, Math.PI * 2);
                 ctx.fill();
 
-                ctx.fillStyle = "black";
+                ctx.fillStyle = "black"; // 眼珠
                 ctx.beginPath();
                 ctx.arc(eye_x, eye_y, L * 0.02, 0, Math.PI * 2);
                 ctx.fill();

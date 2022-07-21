@@ -1,6 +1,7 @@
 // 存储所有游戏对象
 const GAME_OBJECTRS = [];
 
+// 基类 所有需要不断渲染显示的对象都需要继承该对象
 export class GameObject {
     constructor() {
         GAME_OBJECTRS.push(this);
@@ -49,5 +50,5 @@ const step = timestamp => {
     requestAnimationFrame(step) //迭代递归运行,在第t+1帧前再次执行该函数
 }
 
-// requestAnimationFrame(func)可以使得浏览器在渲染下一帧前执行一下函数 func
+// requestAnimationFrame(step)可以使得浏览器在渲染下一帧前执行一下函数 step
 requestAnimationFrame(step)

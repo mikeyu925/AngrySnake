@@ -1,6 +1,7 @@
 // 游戏地图
 <template>
     <div ref="parent" class="gamemap">
+        <!--canvas画布？ tabindex用于获取用户输入 -->
         <canvas ref="canvas" tabindex="0"></canvas>
     </div>
 </template>

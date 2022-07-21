@@ -22,7 +22,7 @@ export class GameMap extends GameObject {
         this.snakes = [
             new Snake({ id: 0, color: "#4876EC", r: this.rows - 2, c: 1 }, this),
             new Snake({ id: 1, color: "#F94848", r: 1, c: this.cols - 2 }, this),
-        ];
+        ]; // 蛇信息(id，颜色，头部坐标)
     }
 
     check_connectivity(g, sx, sy, tx, ty) { // 深度优先搜索 判断是否联通
@@ -34,6 +34,7 @@ export class GameMap extends GameObject {
         for (let i = 0; i < 4; i++) {
             let x = sx + dx[i],
                 y = sy + dy[i];
+            // 剪枝
             if (!g[x][y] && this.check_connectivity(g, x, y, tx, ty)) return true;
         }
         return false;
@@ -85,10 +86,12 @@ export class GameMap extends GameObject {
         return true;
     }
 
+    // 添加键盘输入监听事件
     add_listening_events() {
-        this.ctx.canvas.focus();
+        this.ctx.canvas.focus(); // 聚焦
 
         const [snake0, snake1] = this.snakes;
+        // 根据键盘输入给每个蛇设定方向
         this.ctx.canvas.addEventListener("keydown", e => {
             if (e.key === 'w') snake0.set_direction(0);
             else if (e.key === 'd') snake0.set_direction(1);
@@ -119,7 +122,8 @@ export class GameMap extends GameObject {
         this.ctx.canvas.height = this.L * this.rows;
     }
 
-    check_ready() { // 判断两条蛇是否都准备好下一回合
+    check_ready() { // 判断蛇是否都准备好下一回合
+        // 必须所有蛇均准备好
         for (const snake of this.snakes) {
             if (snake.status !== "idle") return false;
             if (snake.direction === -1) return false;
@@ -159,9 +163,7 @@ export class GameMap extends GameObject {
         this.render(); // 渲染
     }
 
-    render() { // 渲染函数
-        // this.ctx.fillStyle = 'green';
-        // this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    render() { // 游戏画面渲染函数
         const color_even = "#AAD751"; // 偶数格颜色
         const color_odd = "#A2D048"; // 奇数格颜色
         for (let r = 0; r < this.rows; r++) {
