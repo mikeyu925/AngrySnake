@@ -10,6 +10,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * UserDetailsServiceImpl 用于接入数据库信息
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -19,6 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        //
         queryWrapper.eq("username",username);
         User user = userMapper.selectOne(queryWrapper);
         if (user == null) {

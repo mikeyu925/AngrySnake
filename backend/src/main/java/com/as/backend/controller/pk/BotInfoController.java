@@ -9,7 +9,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/pk/")
 public class BotInfoController {
-    @RequestMapping("getbotinfo")
+    @RequestMapping("getinfo")
     public Map<String,String> getBotInfo(){
         Map<String,String> bot = new HashMap<>();
         bot.put("name","Fish");
