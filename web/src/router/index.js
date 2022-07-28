@@ -4,6 +4,9 @@ import RankListIndexView from '../views/ranklist/RankListIndexView'
 import RecordIndexView from '../views/record/RecordIndexView'
 import UserSnakeView from '../views/user/snake/UserSnakeView'
 import NotFound from '../views/error/NotFound'
+import UserAccountLoginView from '../views/user/account/UserAccountLoginView'
+import UserAccountRegisterView from '../views/user/account/UserAccountRegisterView'
+
 
 const routes = [{
         path: "/",
@@ -30,10 +33,21 @@ const routes = [{
         component: UserSnakeView
     },
     {
+        path: "/user/account/login/",
+        name: "user_account_login",
+        component: UserAccountLoginView
+    },
+    {
+        path: "/user/account/register/",
+        name: "user_account_register",
+        component: UserAccountRegisterView
+    },
+    {
         path: "/404/",
         name: "404",
         component: NotFound
-    }, {
+    },
+    {
         path: "/:catchAll(.*)", // 如果输入的是其他网址，则重定向404
         redirect: "/404/"
     }
