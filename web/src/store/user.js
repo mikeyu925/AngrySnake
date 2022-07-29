@@ -7,9 +7,11 @@ export default {
         photo: "",
         token: "",
         is_login: false,
+        // 是否正在拉取信息 默认是true
+        pulling_info: true,
     },
     getters: {},
-    // mutations 通常用来修改数据
+    // mutations 通常用来修改数据  采用commit调用
     mutations: {
         updateUser(state, user) {
             state.id = user.id;
@@ -27,9 +29,12 @@ export default {
             state.photo = "";
             state.token = "";
             state.is_login = false;
-        }
+        },
+        updatePullingInfo(state, pulling_info) {
+            state.pulling_info = pulling_info;
+        },
     },
-    actions: {
+    actions: { // 采用dispatch调用  从云端拉取信息，异步操作
         login(context, data) {
             $.ajax({
                 url: "http://127.0.0.1:6969/user/account/token/",
@@ -40,6 +45,8 @@ export default {
                 },
                 success(resp) {
                     if (resp.error_message === 'success') {
+                        //将token存放至浏览器的localStorage
+                        localStorage.setItem("jwt_token", resp.token);
                         context.commit("updateToken", resp.token);
                         data.success(resp);
                     } else {
@@ -76,6 +83,7 @@ export default {
             });
         },
         logout(context) {
+            localStorage.removeItem("jwt_token")
             context.commit("logout");
         }
     },

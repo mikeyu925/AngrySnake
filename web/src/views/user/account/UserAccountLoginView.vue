@@ -1,5 +1,5 @@
 <template>
-    <ContentField>
+    <ContentField v-if="!$store.state.user.pulling_info">
         <div class="row justify-content-md-center">
             <div class="col-3">
                 <form @submit.prevent="login">
@@ -33,7 +33,24 @@ export default{
     let username = ref('');
     let password = ref('');
     let error_message = ref('');
-
+    // 获取token信息
+    const jwt_token = localStorage.getItem("jwt_token");
+    if(jwt_token){
+        store.commit("updateToken",jwt_token);
+        // 从云端获取信息
+        store.dispatch("getinfo",{
+            success(){
+                // store.commit("updatePullingInfo",true);
+                router.push({name:"home"});
+                store.commit("updatePullingInfo",false);
+            },
+            error(){
+                store.commit("updatePullingInfo",false);
+            }
+        })
+    }else{
+        store.commit("updatePullingInfo",false);
+    }
     const login = () => {
         error_message.value = "";
         store.dispatch("login",{
