@@ -107,7 +107,7 @@
                               <div class="error-message">{{snake.error_message}}</div>
                               <!-- @click 绑定添加事件 -->
                               <button type="button" class="btn btn-primary" @click="update_snake(snake)">保存</button>  
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >取消</button>
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="goback_update">取消</button>
                             </div>
                           </div>
                         </div>
@@ -163,6 +163,7 @@ import ace from 'ace-builds';
 
       const store = useStore();
       let snakes = ref([]);  // 存储snake信息
+      let copy_snakes = ref([]);
       // let copy_snakes = [];
       const snakeadd = reactive({
         title : "",
@@ -179,8 +180,8 @@ import ace from 'ace-builds';
               Authorization: "Bearer " + store.state.user.token, // 验证的 token
           },
           success(resp) {
-            console.log(resp)
             snakes.value = resp;
+            copy_snakes.value = JSON.parse(JSON.stringify(snakes.value));
           }
         })
       }
@@ -219,6 +220,10 @@ import ace from 'ace-builds';
         snakeadd.title = "";
         snakeadd.description = "";
         snakeadd.content = "";
+      }
+
+      const goback_update = () =>{
+          snakes.value = JSON.parse(JSON.stringify(copy_snakes.value));
       }
 
       const remova_snake = (snake) => {
@@ -267,10 +272,12 @@ import ace from 'ace-builds';
       return {
         snakes,
         snakeadd,
+        copy_snakes,
         add_snake,
         remova_snake,
         update_snake,
         clear_snakeadd,
+        goback_update,
       }
     }
 

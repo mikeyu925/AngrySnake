@@ -68,3 +68,21 @@ localStorage.setItem("jwt_token", resp.token);
   - 更新token
   - 利用token从云端获取信息
     - 成功：跳转至首页
+
+
+
+
+
+
+
+
+
+
+
+
+
+## TODO
+
+1. 个人中心界面修改Snake信息时，输入修改信息后点击“取消” 会将当前显示的Snake信息覆盖 【已解决】
+
+   > 设置一个 copy_snakes数组存储修改前的信息，如果取消修改，则将对应的snake还原
