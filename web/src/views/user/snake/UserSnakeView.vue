@@ -62,6 +62,7 @@
                 <tr>
                   <th>昵称</th>
                   <th>创建时间</th>
+                  <th>当前评分</th>
                   <th>操作</th>
                 </tr>
               </thead>
@@ -69,6 +70,7 @@
                 <tr v-for="snake in snakes" :key="snake.id">
                     <td>{{snake.title}}</td>
                     <td>{{snake.createtime}}</td>
+                    <td>{{snake.rating}}</td>
                     <td>
                       <button type="button" class="btn btn-secondary" style="margin-right: 10px" data-bs-toggle="modal" :data-bs-target="'#update-snake-button-' + snake.id">修改</button>
                       <button type="button" class="btn btn-danger" data-bs-toggle="modal" :data-bs-target="'#remove-snake-button-' + snake.id">删除</button>
@@ -130,6 +132,7 @@
                       </div>
 
                     </td>
+                    
                 </tr>
               </tbody>
             </table>
