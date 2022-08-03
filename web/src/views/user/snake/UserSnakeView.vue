@@ -22,7 +22,7 @@
                 <div class="modal-dialog modal-xl">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title">创建属于你自己的Snake</h5>
+                      <h5 class="modal-title">创建一个Snake</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -49,7 +49,7 @@
                       <div class="error-message">{{snakeadd.error_message}}</div>
                       <!-- @click 绑定添加事件 -->
                       <button type="button" class="btn btn-primary" @click="add_snake">创建</button>  
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="clear_snakeadd">取消</button>
                     </div>
                   </div>
                 </div>
@@ -194,6 +194,12 @@ import ace from 'ace-builds';
           },
         })
       }
+      // 如果创建时取消输入，则 清空之前的输入
+      const clear_snakeadd = () => {
+        snakeadd.title = "";
+        snakeadd.description = "";
+        snakeadd.content = "";
+      }
 
       const remova_snake = (snake) => {
         $.ajax({
@@ -243,6 +249,7 @@ import ace from 'ace-builds';
         add_snake,
         remova_snake,
         update_snake,
+        clear_snakeadd,
       }
     }
 
