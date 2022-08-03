@@ -20,8 +20,8 @@ public class Snake {
     private String description;
     private String content;
     private Integer rating;
-    @JsonFormat(pattern = "yyyy-MM-d HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-d HH:mm:ss",timezone = "Asia/Shanghai")
     private Date createtime;
-    @JsonFormat(pattern = "yyyy-MM-d HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-d HH:mm:ss",timezone = "Asia/Shanghai")
     private Date modifytime;
 }

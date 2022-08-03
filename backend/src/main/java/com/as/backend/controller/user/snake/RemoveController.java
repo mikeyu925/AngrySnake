@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+/**
+ * 删除一条蛇
+ */
 @RestController
 public class RemoveController {
     @Autowired

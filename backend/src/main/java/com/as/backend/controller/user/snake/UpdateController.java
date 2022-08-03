@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+/**
+ * 更新一条蛇的信息
+ */
 @RestController
 public class UpdateController {
     @Autowired

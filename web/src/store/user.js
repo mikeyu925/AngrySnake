@@ -7,7 +7,7 @@ export default {
         photo: "",
         token: "",
         is_login: false,
-        // 是否正在拉取信息 默认是true
+        // 是否正在拉取信息 默认是 true
         pulling_info: true,
     },
     getters: {},
@@ -34,7 +34,8 @@ export default {
             state.pulling_info = pulling_info;
         },
     },
-    actions: { // 采用dispatch调用  从云端拉取信息，异步操作
+    actions: {
+        // 采用dispatch调用  从云端拉取信息，异步操作
         login(context, data) {
             $.ajax({
                 url: "http://127.0.0.1:6969/user/account/token/",

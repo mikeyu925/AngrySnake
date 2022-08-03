@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+/**
+ * 添加一条蛇
+ */
 @RestController
 public class AddController {
     @Autowired
