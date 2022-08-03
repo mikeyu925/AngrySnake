@@ -71,7 +71,7 @@
                     <td>{{snake.createtime}}</td>
                     <td>
                       <button type="button" class="btn btn-secondary" style="margin-right: 10px" data-bs-toggle="modal" :data-bs-target="'#update-snake-button-' + snake.id">修改</button>
-                      <button type="button" class="btn btn-danger" @click="remova_snake(snake)">删除</button>
+                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" :data-bs-target="'#remove-snake-button-' + snake.id">删除</button>
                     
                       <!-- 修改模态框 Modal 通过id选择并弹出 -->
                       <div class="modal fade" :id="'update-snake-button-' + snake.id" tabindex="-1" >
@@ -105,11 +105,30 @@
                               <div class="error-message">{{snake.error_message}}</div>
                               <!-- @click 绑定添加事件 -->
                               <button type="button" class="btn btn-primary" @click="update_snake(snake)">保存</button>  
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >取消</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="modal" :id="'remove-snake-button-' + snake.id" tabindex="-1">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">再次确认！</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <p>您确定要删除当前Snake?</p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary" @click="remova_snake(snake)">确定</button>
                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                             </div>
                           </div>
                         </div>
                       </div>
+
                     </td>
                 </tr>
               </tbody>
@@ -140,8 +159,8 @@ import ace from 'ace-builds';
       "https://cdn.jsdelivr.net/npm/ace-builds@" + require('ace-builds').version + "/src-noconflict/")
 
       const store = useStore();
-      let snakes = ref([])  // 存储snake信息
-
+      let snakes = ref([]);  // 存储snake信息
+      // let copy_snakes = [];
       const snakeadd = reactive({
         title : "",
         description : "",
@@ -157,10 +176,8 @@ import ace from 'ace-builds';
               Authorization: "Bearer " + store.state.user.token, // 验证的 token
           },
           success(resp) {
+            console.log(resp)
             snakes.value = resp;
-          },
-          error(resp){
-            console.error(resp);
           }
         })
       }
@@ -213,6 +230,7 @@ import ace from 'ace-builds';
           },
           success(resp) {
             if(resp.error_message === "success"){
+              Modal.getInstance('#remove-snake-button-' + snake.id).hide();
               refresh_snakes();
             }
           },
@@ -252,11 +270,6 @@ import ace from 'ace-builds';
         clear_snakeadd,
       }
     }
-
-
-
-
-
 
   } 
 </script>
