@@ -9,24 +9,26 @@
 
 
 <script>
-    import {GameMap} from "@/assets/scripts/GameMap"
-    import {ref, onMounted} from 'vue'
+import {GameMap} from "@/assets/scripts/GameMap"
+import {ref, onMounted} from 'vue'
+import {useStore} from 'vuex'
 
-    export default{
-        setup(){
-            let parent = ref(null);
-            let canvas = ref(null);
-            // 当组件挂载完之后，需要执行
-            onMounted(()=>{
-                new GameMap(canvas.value.getContext('2d'),parent.value)
-            })
+export default{
+    setup(){
+        const store = useStore();
+        let parent = ref(null);
+        let canvas = ref(null);
+        // 当组件挂载完之后，需要执行
+        onMounted(()=>{
+            new GameMap(canvas.value.getContext('2d'),parent.value,store)
+        })
 
-            return { // 返回之后才能在template中用
-                parent,
-                canvas
-            }
+        return { // 返回之后才能在template中用
+            parent,
+            canvas
         }
     }
+}
 </script>
 
 <style scoped>

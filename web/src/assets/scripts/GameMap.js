@@ -7,11 +7,11 @@ import { Wall } from "./Wall";
 
 export class GameMap extends GameObject {
     // ctx 画布,parent 画布的父元素，画布的父元素，用来动态修改画布长宽
-    constructor(ctx, parent) {
+    constructor(ctx, parent, store) {
         super(); // 调用基类构造函数
         this.ctx = ctx;
         this.parent = parent;
-
+        this.store = store;
         this.L = 0; // 格子的长度 ==> 会根据页面长宽动态改变
         this.rows = 13; // 游戏地图的行数(行方向格子数) 
         this.cols = 14; // 游戏地图的列数(列方向格子数)
@@ -25,55 +25,9 @@ export class GameMap extends GameObject {
         ]; // 蛇信息(id，颜色，头部坐标)
     }
 
-    check_connectivity(g, sx, sy, tx, ty) { // 深度优先搜索 判断是否联通
-        if (sx == tx && sy == ty) return true;
-
-        g[sx][sy] = true;
-        let dx = [-1, 0, 1, 0],
-            dy = [0, 1, 0, -1];
-        for (let i = 0; i < 4; i++) {
-            let x = sx + dx[i],
-                y = sy + dy[i];
-            // 剪枝
-            if (!g[x][y] && this.check_connectivity(g, x, y, tx, ty)) return true;
-        }
-        return false;
-    }
 
     create_walls() {
-        const has_wall = []; // 标记是否有墙
-        // 初始化
-        for (let r = 0; r < this.rows; r++) {
-            has_wall[r] = [];
-            for (let c = 0; c < this.cols; c++) {
-                has_wall[r][c] = false;
-            }
-        }
-        // 给四周加上障碍物
-        for (let r = 0; r < this.rows; r++) {
-            has_wall[r][0] = has_wall[r][this.cols - 1] = true;
-        }
-        for (let c = 0; c < this.cols; c++) {
-            has_wall[0][c] = has_wall[this.rows - 1][c] = true;
-        }
-        // 创建随机内部障碍物 ==> 优化：采用中心对称
-        for (let i = 0; i < this.inner_wall_count / 2; i++) {
-            let r = -1;
-            let c = -1;
-            do {
-                r = parseInt(Math.random() * this.rows);
-                c = parseInt(Math.random() * this.cols);
-            } while (has_wall[r][c] == true || has_wall[this.rows - 1 - r][this.cols - 1 - c] == true || (r == this.rows - 2 && c == 1) || (r == 1 && c == this.cols - 2));
-            has_wall[r][c] = true;
-            has_wall[this.rows - 1 - r][this.cols - 1 - c] = true; // 中心对称
-            // has_wall[c][r] = true; // 对角线对称 
-        }
-
-        // 判断两条蛇是否更够联通
-        const copy_g = JSON.parse(JSON.stringify(has_wall)); // 深度拷贝
-        // 如果不连通，直接返回false
-        if (!this.check_connectivity(copy_g, this.rows - 2, 1, 1, this.cols - 2)) return false;
-
+        const has_wall = this.store.state.pk.gamemap;
         // 将墙添加至存储墙的列表
         for (let r = 0; r < this.rows; r++) {
             for (let c = 0; c < this.cols; c++) {
@@ -82,8 +36,6 @@ export class GameMap extends GameObject {
                 }
             }
         }
-
-        return true;
     }
 
     // 添加键盘输入监听事件
@@ -106,11 +58,7 @@ export class GameMap extends GameObject {
 
 
     start() { // 只执行一次
-        // while(!this.create_walls()); // 不建议使用死循环
-        for (let i = 0; i < 1000; i++) {
-            if (this.create_walls()) // 创建墙
-                break;
-        }
+        this.create_walls()
         this.add_listening_events();
     }
 
