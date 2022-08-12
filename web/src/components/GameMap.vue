@@ -20,7 +20,10 @@ export default{
         let canvas = ref(null);
         // 当组件挂载完之后，需要执行
         onMounted(()=>{
-            new GameMap(canvas.value.getContext('2d'),parent.value,store)
+            store.commit(
+                "updateGameObject",
+                new GameMap(canvas.value.getContext('2d'),parent.value,store)
+            );
         })
 
         return { // 返回之后才能在template中用

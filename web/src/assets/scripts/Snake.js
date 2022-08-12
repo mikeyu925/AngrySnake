@@ -69,9 +69,10 @@ export class Snake extends GameObject {
             this.cells[i] = JSON.parse(JSON.stringify(this.cells[i - 1])); // 注意要深拷贝
         } // 此时头部相当于多了一个自己的复制 1234 ==> 1123
 
-        if (!this.gamemap.check_valid(this.next_cell)) { // 撞到了，去世
-            this.status = "die";
-        }
+        // 转成后端判断
+        // if (!this.gamemap.check_valid(this.next_cell)) { // 撞到了，去世
+        //     this.status = "die";
+        // }
     }
 
     update_move() { // 移动
