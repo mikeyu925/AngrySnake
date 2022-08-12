@@ -1,7 +1,7 @@
 <template>
     <div class="matchground">
         <div class="row">
-            <div class="col-6">
+            <div class="col-4">
                 <div class="user-photo">
                     <img :src="$store.state.user.photo" alt="">
                 </div>
@@ -9,7 +9,12 @@
                     {{$store.state.user.username}}
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-4">
+                <div class="vs">
+                    vs
+                </div>
+            </div>
+            <div class="col-4">
                 <div class="user-photo">
                     <img :src="$store.state.pk.opponent_photo" alt="">
                 </div>
@@ -18,7 +23,7 @@
                 </div>
             </div>
 
-            <div class="col-12" style=" text-align: center; padding-top: 10vh">
+            <div class="col-12" style=" text-align: center; padding-top: 12vh">
                 <button @click="click_match_btn" type="button" class="btn btn-warning btn-lg">{{match_btn_info}}</button>
             </div>
         </div>
@@ -68,6 +73,15 @@ export default {
         height: 70vh;
         margin: 40px auto;
         background: rgba(50, 50, 50, 0.5);
+    }
+
+    div.vs{
+        text-align: center; 
+        color: rgb(223, 65, 12);
+        font-size: 140px;
+        font-weight: 600;
+        font-style: italic;
+        padding-top: 10vh;
     }
 
     div.user-photo{

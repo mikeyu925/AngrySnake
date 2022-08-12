@@ -3,7 +3,10 @@
         <div class="card">
             <div class="card-body">
                 <!-- 要填充的内容都放在slot里面 -->
-                <slot></slot>
+                <slot>
+
+
+                </slot>
             </div>
         </div>
     </div>
@@ -15,7 +18,8 @@
 
 
 <style scoped>
-div.content-field{
-    margin-top: 30px;
-}
+    div.content-field{
+        margin-top: 40px;
+        width: 400px;
+    }
 </style>

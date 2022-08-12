@@ -132,7 +132,6 @@ public class WebSocketServer {
      */
     private void stopMatching(){
         matchpool.remove(this.user);
-        System.out.println("stop matching");
     }
 
     /**

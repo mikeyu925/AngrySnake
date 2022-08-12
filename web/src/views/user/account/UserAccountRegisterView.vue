@@ -1,7 +1,7 @@
 <template>
     <ContentField>
         <div class="row justify-content-md-center">
-            <div class="col-3">
+            <div class="col-9">
                 <form @submit.prevent="register">
                     <div class="mb-3">
                         <label for="exampleFormControlInput1" class="form-label">用户名</label>
@@ -72,8 +72,8 @@ export default{
 
 
 <style scoped>
-  div.button{
-    width: 100;
+  button{
+    width: 100%;
   }
   div.error-message{
     color: red;
