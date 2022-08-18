@@ -20,6 +20,11 @@
           <router-link :class="route_name == 'ranklist_index' ? 'nav-link active' : 'nav-link'" :to="{name:'ranklist_index'}">排行榜 </router-link>
         </li>
       </ul>
+
+      <!-- <ul>
+        <audio ref="audio" src="https://img.youpenglai.com/penglai/1.mp3" loop preload="auto"></audio>
+      </ul> -->
+
       <ul class="navbar-nav" v-if="$store.state.user.is_login">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

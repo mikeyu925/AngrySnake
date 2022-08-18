@@ -4,8 +4,6 @@
             <div class="card-body">
                 <!-- 要填充的内容都放在slot里面 -->
                 <slot>
-
-
                 </slot>
             </div>
         </div>
