@@ -71,9 +71,44 @@ localStorage.setItem("jwt_token", resp.token);
 
 
 
+## 项目架构
+
+### 对战匹配
+
+- 用户从浏览器Client 点击开始匹配 / 取消匹配，后端Websocket 接收到前端消息后触发 onMessage()
+  - 开始匹配 ==> startMatching
+  - 取消匹配 ==> stopMatching
+- 后端 Server 发送post请求(`restTemplate.postForObject(addPlayerUrl,data,String.class)`) 至 匹配微服务系统。(data为用户信息：userID,rating)
+- 微服务系统解析data，然后将用户加入用户匹配池中。
+- 匹配池中单独开一个线程用于用户匹配
+  - 每间隔1s进行一次检查匹配
+  - 如果两个用户匹配成功 再通过`restTemplate.postForObject(startGameUrl,data,String.class)`发送开始游戏请求给Server后端。
+- Server后端收到匹配微服务系统的匹配结果后开始准备一场游戏
+  - 建立地图
+  - 将地图、对手信息分别传给Client浏览器
+
+![image-20220818151308693](readme.assets/image-20220818151308693.png)
+
+### 代码执行微服务
+
+利用joor-java-8动态编译执行java代码
 
 
 
+在未来是可以换成任意语言的，可以在云端替换成 Docker ，设定一个内存上限及执行时间去执行一段代码。
+
+> 如何启动一个docker，并启动一个命令。
+
+
+
+## 报错/警告 解决
+
+- SpringBoot启动时出现：java.io.IOException: The server sockets created using the LocalRMIServerSocketFactor
+
+  > 方法1：在VM options里添加：-Dcom.sun.management.jmxremote.local.only=false
+  >
+  > 方法2：在自己的jdk所在文件夹中搜索找到management.properties这个文件
+  > 在文件中找到85行：com.sun.management.jmxremote.local.only=false ， 取消该行注释
 
 
 

@@ -1,7 +1,7 @@
 package com.as.backend.consumer.utils;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
@@ -12,16 +12,17 @@ import java.util.List;
 @NoArgsConstructor
 public class Player {
     private Integer id;
+    private Integer botId; // -1: 人工， 否则表示AI
+    private String  botCode;
     private Integer sx;
     private Integer sy;
-
     // 记录 历史上玩家方向上的序列
     private List<Integer> steps;
 
     /**
      * 检验当前回合是否增加蛇长度
      * @return
-     */
+     **/
     private boolean check_tail_increasing(int step){
         if (step <= 10) return true;
         return step % 3 == 1;

@@ -20,6 +20,9 @@ export default{
     setup() {
         const store = useStore();
         const socketUrl = `ws://127.0.0.1:6969/websocket/${store.state.user.token}/`;
+
+        store.commit("updateLoser","none");
+
         let socket = null;
         // 组件被挂载时执行 onMounted (组件被挂载 == 页面被打开？)
         onMounted(() => {

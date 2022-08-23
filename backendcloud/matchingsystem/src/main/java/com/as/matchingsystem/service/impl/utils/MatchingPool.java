@@ -16,6 +16,7 @@ public class MatchingPool extends Thread{
     private static List<Player> players = new ArrayList<>();
     private final ReentrantLock lock = new ReentrantLock();
     private static RestTemplate restTemplate;
+
     private final static String startGameUrl = "http://127.0.0.1:6969/pk/start/game/";
 
     @Autowired
@@ -23,15 +24,14 @@ public class MatchingPool extends Thread{
         MatchingPool.restTemplate = restTemplate;
     }
 
-    public void addPlayer(Integer userId, Integer rating) {
+    public void addPlayer(Integer userId, Integer rating,Integer botId) {
         lock.lock();
-        try {
-            players.add(new Player(userId, rating, 0));
+        try { // Bug:已解决 new 对象时初始化打错了 ... 细心一点
+            players.add(new Player(userId, rating, botId,0));
         } finally {
             lock.unlock();
         }
     }
-
 
     public void removePlayer(Integer userId) {
         lock.lock();
@@ -64,10 +64,12 @@ public class MatchingPool extends Thread{
      * @param b
      */
     private void sendResult(Player a,Player b){
-        System.out.println("send result: " + a + " " + b);
+//        System.out.println("send result: " + a.toString() + " " + b.toString());
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
         data.add("a_id", a.getUserId().toString());
+        data.add("a_bot_id",a.getBotId().toString());
         data.add("b_id", b.getUserId().toString());
+        data.add("b_bot_id",b.getBotId().toString());
         restTemplate.postForObject(startGameUrl, data, String.class);
     }
     /**

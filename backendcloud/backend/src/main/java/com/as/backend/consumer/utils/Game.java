@@ -3,6 +3,9 @@ package com.as.backend.consumer.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.as.backend.consumer.WebSocketServer;
 import com.as.backend.pojo.Record;
+import com.as.backend.pojo.Snake;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
@@ -27,15 +30,29 @@ public class Game extends Thread{
     private ReentrantLock lock = new ReentrantLock();
     private String status = "playing"; // 进行: playing 结束: finshed
     private String loser = ""; // all : 平局  A: A输  B: B输
+    private final static String addBotUrl = "http://127.0.0.1:3002/bot/add/";
 
-    public  Game(int r,int c,int cnt,int idA,int idB){
+
+    public  Game(int r, int c, int cnt, int idA, Snake snakeA,int idB,Snake snakeB){
         this.rows = r;
         this.cols = c;
         this.inner_walls_count = cnt;
         this.walls = new int[r][c];
+
+        Integer botId_A = -1,botId_B = -1;
+        String botCodeA = "",botCodeB = "";
+
+        if (snakeA != null){
+            botId_A = snakeA.getId();
+            botCodeA = snakeA.getContent();
+        }
+        if (snakeB != null){
+            botId_B = snakeB.getId();
+            botCodeB = snakeB.getContent();
+        }
         // 初始化A B玩家起始坐标
-        this.player_A = new Player(idA,this.rows-2,1,new ArrayList<>());
-        this.player_B = new Player(idB,1,this.cols-2,new ArrayList<>());
+        this.player_A = new Player(idA,botId_A,botCodeA,this.rows-2,1,new ArrayList<>());
+        this.player_B = new Player(idB,botId_B,botCodeB,1,this.cols-2,new ArrayList<>());
     }
 
     public int[][] getGameMap(){
@@ -47,6 +64,7 @@ public class Game extends Thread{
     public Player getPlayerB(){
         return this.player_B;
     }
+
     public void setNextStepA(Integer nextStepA){
         lock.lock();
         try {
@@ -123,6 +141,50 @@ public class Game extends Thread{
     }
 
     /**
+     * 将当前的 对局信息 编码成字符串  # 隔开
+     * 第一段：地图
+     * 第二段: 自己的起始坐标 x
+     * 第三段: 自己的起始坐标 y
+     * 第四段: 自己的操作
+     * 第五段: 对手的起始坐标 x
+     * 第六段: 对手的起始坐标 y
+     * 第七段：对手的操作
+     * @param player
+     * @return
+     */
+    private String getInput(Player player){
+        Player me,you;
+        if (player_A.getId().equals(player.getId())){
+            me = player_A;
+            you = player_B;
+        }else{
+            me = player_B;
+            you = player_A;
+        }
+        return    getMapString() + "#"
+                + me.getSx() + "#"
+                + me.getSy() + "#("
+                + me.getStepsString() + ")#"
+                + you.getSx() + "#"
+                + you.getSy() + "#("
+                + you.getStepsString() + ")#";
+    }
+
+    /**
+     * 向AI自动对战 3002端口 发送Bot信息
+     * @param player
+     */
+    private void sendBotCode(Player player){
+        if (player.getId().equals(-1)) return ; // 选手亲自出马，不需要执行代码
+
+        MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
+        data.add("user_id",player.getId().toString());
+        data.add("bot_code",player.getBotCode());
+        data.add("input",getInput(player));
+        WebSocketServer.restTemplate.postForObject(addBotUrl,data,String.class);
+    }
+
+    /**
      * 等待两名玩家下一步操作
      * @return
      */
@@ -132,6 +194,10 @@ public class Game extends Thread{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        sendBotCode(player_A);
+        sendBotCode(player_B);
+
         for (int i = 0;i < 50;i++){
             try {
                 Thread.sleep(100); // 睡100毫秒
