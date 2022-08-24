@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.as.backend.consumer.WebSocketServer;
 import com.as.backend.pojo.Record;
 import com.as.backend.pojo.Snake;
+import com.as.backend.pojo.User;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -244,9 +245,34 @@ public class Game extends Thread{
     }
 
     /**
+     * 更新玩家天梯积分
+     * @param player
+     * @param rating
+     */
+    private void updateRating(Player player,Integer rating){
+        User user = WebSocketServer.userMapper.selectById(player.getId());
+        user.setRating(rating);
+
+        WebSocketServer.userMapper.updateById(user);
+    }
+
+    /**
      * 将此次对局信息保存至数据库
      */
     private void saveToDatabase(){
+        Integer ratingA = WebSocketServer.userMapper.selectById(player_A.getId()).getRating();
+        Integer ratingB = WebSocketServer.userMapper.selectById(player_B.getId()).getRating();
+
+        if ("A".equals(loser)){
+            ratingA -= 2;
+            ratingB += 3;
+        }else if ("B".equals(loser)){
+            ratingA += 3;
+            ratingB -= 2;
+        }
+        updateRating(player_A,ratingA);
+        updateRating(player_B,ratingB);
+
         Record record = new Record(
                 null,
                 player_A.getId(),
