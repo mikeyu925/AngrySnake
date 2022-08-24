@@ -252,7 +252,6 @@ public class Game extends Thread{
     private void updateRating(Player player,Integer rating){
         User user = WebSocketServer.userMapper.selectById(player.getId());
         user.setRating(rating);
-
         WebSocketServer.userMapper.updateById(user);
     }
 

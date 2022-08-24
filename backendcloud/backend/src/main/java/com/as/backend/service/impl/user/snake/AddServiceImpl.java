@@ -6,6 +6,7 @@ import com.as.backend.pojo.User;
 import com.as.backend.service.impl.utils.UserDetailsImpl;
 import com.as.backend.service.user.snake.AddService;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -56,6 +57,14 @@ public class AddServiceImpl implements AddService {
             map.put("error_message","代码长度不能超过10000");
             return map;
         }
+
+        QueryWrapper<Snake> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",user.getId());
+        if (snakeMapper.selectCount(queryWrapper) >= 10){
+            map.put("error_message","创建Snake数量过多，超过数量(10)限制");
+            return map;
+        }
+
         Date now = new Date();
         Snake snake = new Snake(null,user.getId(),title,description,content,now,now);
 

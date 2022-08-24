@@ -1,4 +1,3 @@
-// 游戏区域 PlayGround
 <template>
     <div class="playground">
         <GameMap />
