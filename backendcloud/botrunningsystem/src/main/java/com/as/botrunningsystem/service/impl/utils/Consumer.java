@@ -9,10 +9,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 @Component
 public class Consumer extends Thread{
@@ -31,9 +30,10 @@ public class Consumer extends Thread{
      */
     public void startTimeout(long timeout,Bot bot){
         this.bot = bot;
+        // 执行当前线程任务
         this.start();
         try {
-            this.join(timeout); // 最多等待 timeout秒
+            this.join(timeout); // 最多等待 timeout毫秒
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -47,34 +47,77 @@ public class Consumer extends Thread{
      * @return
      */
     private String addUid(String code,String uid){
-        int k = code.indexOf(" implements com.as.botrunningsystem.utils.BotInterface");
+        int k = code.indexOf(" implements java.util.function.Supplier<Integer>");
         return code.substring(0,k) + uid + code.substring(k);
     }
 
+    /**
+     * 线程执行体
+     */
     @Override
     public void run() {
         UUID uuid = UUID.randomUUID();
         String uid = uuid.toString().substring(0,8);
-        String code = addUid(bot.getBotCode(),uid);
-        // 创建这个类
-        createFile("Bot" + uid,code);
-        try{
-            BotInterface botInterface = CompilerUtil.generateClass("Bot" + uid, "com.kob.botrunningsystem.utils", code);
-            Integer direction = botInterface.nextMove(bot.getInput());
-            System.out.println(bot.getUserId() + " move-dir : " + direction);
 
-            MultiValueMap<String ,String> data = new LinkedMultiValueMap<>();
-            data.add("user_id",bot.getUserId().toString());
-            data.add("direction",direction.toString());
-            deleteFile("Bot" + uid);
+        Supplier<Integer> botInterface = Reflect.compile(
+                "com.as.botrunningsystem.utils.Bot" + uid,
+                addUid(bot.getBotCode(), uid)
+        ).create().get();
 
-            restTemplate.postForObject(receiveBotMoveUrl,data,String.class);
-        }catch (Exception e){
-            e.printStackTrace();
+        System.out.println(bot.getUserId() + " : " + bot.getInput());
+
+
+        File file = new File("input.txt");
+        try (PrintWriter fout = new PrintWriter(file)) {
+            fout.println(bot.getInput()); // 将对局信息保存至文件
+            fout.flush();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
+        Integer direction = botInterface.get();
+        // 封装信息【用户ID、snake的下一步方向】
+        MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
+        data.add("user_id", bot.getUserId().toString());
+        data.add("direction", direction.toString());
+        // 发送至后端 ReceiveBotMoveController
+        restTemplate.postForObject(receiveBotMoveUrl, data, String.class);
     }
 
+    /** 废弃
+
+     @Override
+     public void run() {
+     UUID uuid = UUID.randomUUID();
+     String uid = uuid.toString().substring(0,8);
+     String code = addUid(bot.getBotCode(),uid);
+     // 创建这个类
+     createFile("Bot" + uid,code);
+     try{
+     Supplier<Integer> botInterface = CompilerUtil.generateClass("Bot" + uid, "com.kob.botrunningsystem.utils", code);
+
+     File file = new File("input.txt");
+     try(PrintWriter fout = new PrintWriter(file)) {
+     fout.println(bot.getInput());
+     fout.flush();
+     }catch (FileNotFoundException fe){
+     fe.printStackTrace();
+     }
+
+     Integer direction = botInterface.get();
+     System.out.println(bot.getUserId() + " move-dir : " + direction);
+
+     MultiValueMap<String ,String> data = new LinkedMultiValueMap<>();
+     data.add("user_id",bot.getUserId().toString());
+     data.add("direction",direction.toString());
+     deleteFile("Bot" + uid);
+
+     restTemplate.postForObject(receiveBotMoveUrl,data,String.class);
+     }catch (Exception e){
+     e.printStackTrace();
+     }
+
+     }
     private void deleteFile(String name) {
         // 这个路径是自己写的，自己定义即可
         File file = new File("F:\\Java\\JavaProjects\\AngrySnake\\backendcloud\\botrunningsystem/src/main/java/com/as/botrunningsystem/utils/" + name + ".java");
@@ -89,9 +132,10 @@ public class Consumer extends Thread{
             file.write(code);
             file.flush();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
+
+     **/
 
 }

@@ -13,12 +13,12 @@ import java.util.Objects;
 public class BotRunningController {
     @Autowired
     private BotRunningService botRunningService;
-
     @PostMapping("/bot/add/")
     public String addBot(@RequestParam MultiValueMap<String,String> data){
         Integer userId = Integer.parseInt(Objects.requireNonNull(data.getFirst("user_id")));
         String botCode = data.getFirst("bot_code");
         String input = data.getFirst("input");
+//        System.out.println(input);
         return botRunningService.addBot(userId,botCode,input);
     }
 

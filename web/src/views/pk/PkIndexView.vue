@@ -1,5 +1,6 @@
 <template>
     <PlayGround v-if="$store.state.pk.status === 'playing'" />
+    <SnakeinfoBoard v-if="$store.state.pk.status === 'playing'" />
     <MatchGround v-if="$store.state.pk.status === 'matching'" />
     <ResultBoard v-if="$store.state.pk.loser != 'none'"/>
 </template>
@@ -8,6 +9,7 @@
 import PlayGround from '../../components/PlayGround.vue'
 import MatchGround from '../../components/MatchGround.vue'
 import ResultBoard from '../../components/ResultBoard.vue'
+import SnakeinfoBoard from '../../components/SnakeinfoBoard.vue'
 import {onMounted,onUnmounted} from 'vue'
 import {useStore} from 'vuex'
 
@@ -16,11 +18,12 @@ export default{
         PlayGround,
         MatchGround,
         ResultBoard,
+        SnakeinfoBoard,
     },
     setup() {
         const store = useStore();
-        const socketUrl = `ws://127.0.0.1:6969/websocket/${store.state.user.token}/`;
-
+        const socketUrl = `wss://app3235.acapp.acwing.com.cn/websocket/${store.state.user.token}/`;
+        // const socketUrl = `ws://127.0.0.1:6969/websocket/${store.state.user.token}/`;
         store.commit("updateLoser","none");
         store.commit("updateIsRecord",false);
 
@@ -50,13 +53,14 @@ export default{
                     });
                     setTimeout(()=>{
                         store.commit("updateStatus","playing");  // 修改状态
-                    },500); //0.5秒后跳转至pk游戏界面
+                    },200); //0.2秒后跳转至pk游戏界面
                     
                     store.commit("updateGame",data.game);
                 }else if(data.event === "move"){
-                    console.log(data);
+                    // console.log(data);
                     const game = store.state.pk.gameObject;
-                    const [snake0,snake1] = game.snakes;
+                    console.log(game);
+                    const [snake0,snake1] = game.snakes; // 为什么是错误的(null) ?
                     snake0.set_direction(data.a_direction);
                     snake1.set_direction(data.b_direction);
                 }else if(data.event === "result"){
@@ -92,5 +96,10 @@ export default{
 </script>
 
 <style scoped>
-
+div.user-color{
+    text-align: center;
+    color:white;
+    font-size: 30px;
+    font-weight: 600;
+}
 </style>

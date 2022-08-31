@@ -41,7 +41,8 @@ export default{
 
     const register = () =>{
       $.ajax({
-        url: "http://127.0.0.1:6969/user/account/register/",
+        // url: "http://127.0.0.1:6969/api/user/account/register/",
+        url: "https://app3235.acapp.acwing.com.cn/api/user/account/register/",
         type: "post",
         data:{
           username:username.value,
@@ -49,8 +50,8 @@ export default{
           confirmedPassword:confirmedPassword.value,
         },
         success(resp) {
-          if(resp.error_message === "success"){
-            router.push({name:"user_account_login"});
+          if(resp.error_message === "用户名注册成功!"){
+            router.push({name : 'user_account_login'});
           }else{
             error_message.value = resp.error_message;
           }

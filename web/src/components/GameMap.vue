@@ -9,30 +9,31 @@
 
 
 <script>
-import {GameMap} from "@/assets/scripts/GameMap"
-import {ref, onMounted} from 'vue'
-import {useStore} from 'vuex'
+import { GameMap } from "@/assets/scripts/GameMap";
+import { ref, onMounted } from 'vue'
+import { useStore } from "vuex";
 
-export default{
-    setup(){
+export default {
+    setup() {
         const store = useStore();
         let parent = ref(null);
         let canvas = ref(null);
-        // 当组件挂载完之后，需要执行
-        onMounted(()=>{
+
+        onMounted(() => {
             store.commit(
                 "updateGameObject",
-                new GameMap(canvas.value.getContext('2d'),parent.value,store)
+                new GameMap(canvas.value.getContext('2d'), parent.value, store)
             );
-        })
+        });
 
-        return { // 返回之后才能在template中用
+        return {
             parent,
             canvas
         }
     }
 }
 </script>
+
 
 <style scoped>
     div.gamemap{

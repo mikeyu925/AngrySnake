@@ -14,6 +14,9 @@ import "bootstrap/dist/js/bootstrap"
 export default{
   components:{
     Navbar
+  },
+  setup(){
+    
   }
 }
 </script>

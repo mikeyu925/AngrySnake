@@ -38,7 +38,8 @@ export default {
         // 采用dispatch调用  从云端拉取信息，异步操作
         login(context, data) {
             $.ajax({
-                url: "http://127.0.0.1:6969/user/account/token/",
+                // url: "http://127.0.0.1:6969/api/user/account/token/",
+                url: "https://app3235.acapp.acwing.com.cn/api/user/account/token/",
                 type: "post",
                 data: {
                     username: data.username,
@@ -61,7 +62,8 @@ export default {
         },
         getinfo(context, data) {
             $.ajax({
-                url: "http://127.0.0.1:6969/user/account/info/",
+                // url: "http://127.0.0.1:6969/api/user/account/info/",
+                url: "https://app3235.acapp.acwing.com.cn/api/user/account/info/",
                 type: "get",
                 headers: {
                     Authorization: "Bearer " + context.state.token,

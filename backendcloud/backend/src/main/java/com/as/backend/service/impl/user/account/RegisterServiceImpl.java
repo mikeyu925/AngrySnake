@@ -56,13 +56,10 @@ public class RegisterServiceImpl implements RegisterService {
             return map;
         }
 
-
-
         if (password.length() > 100 ){
             map.put("error_message","密码太长!请长度输入小于100!");
             return map;
         }
-
         // 判断用户名是否已经被使用
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",username);

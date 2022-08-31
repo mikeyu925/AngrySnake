@@ -33,6 +33,10 @@
 
 
 
+### Docker
+
+优点：方便项目迁移，如果想要更换服务商，直接导出镜像
+
 
 
 ## 用户登录
@@ -111,6 +115,14 @@ localStorage.setItem("jwt_token", resp.token);
   > 在文件中找到85行：com.sun.management.jmxremote.local.only=false ， 取消该行注释
 
 
+
+
+
+## Bug记录
+
+![image-20220830105238485](readme.assets/image-20220830105238485.png)
+
+好像地图向上偏移了一个单位。。。。
 
 
 

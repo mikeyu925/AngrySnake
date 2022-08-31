@@ -13,13 +13,5 @@ import java.util.List;
 
 @SpringBootTest
 class BackendApplicationTests {
-    @Autowired
-    private UserMapper userMapper;
-    @Test
-    void contextLoads() {
-        System.out.println("-------Test--------");
-        List<User> userList = userMapper.selectList(null);
-        userList.forEach(System.out::println);
-    }
 
 }

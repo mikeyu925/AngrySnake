@@ -16,7 +16,7 @@ public class UpdateController {
     @Autowired
     private UpdateService updateService;
 
-    @PostMapping("/user/snake/update/")
+    @PostMapping("/api/user/snake/update/")
     Map<String,String> update(@RequestParam Map<String,String> data){
         return updateService.update(data);
     }

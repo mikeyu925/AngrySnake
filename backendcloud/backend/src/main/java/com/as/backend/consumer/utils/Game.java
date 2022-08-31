@@ -168,7 +168,7 @@ public class Game extends Thread{
                 + me.getStepsString() + ")#"
                 + you.getSx() + "#"
                 + you.getSy() + "#("
-                + you.getStepsString() + ")#";
+                + you.getStepsString() + ")";
     }
 
     /**
@@ -176,12 +176,13 @@ public class Game extends Thread{
      * @param player
      */
     private void sendBotCode(Player player){
-        if (player.getId().equals(-1)) return ; // 选手亲自出马，不需要执行代码
-
+        if (player.getBotId().equals(-1)) return ; // 选手亲自出马，不需要执行代码
+        // Bot出战 ：打包【玩家ID、snake代码、对局信息】
         MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
         data.add("user_id",player.getId().toString());
         data.add("bot_code",player.getBotCode());
         data.add("input",getInput(player));
+        // 对botrunningsystem发送请求 addboturl
         WebSocketServer.restTemplate.postForObject(addBotUrl,data,String.class);
     }
 
@@ -195,10 +196,11 @@ public class Game extends Thread{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        // 如果不是人工出战，设置Bot方向
         sendBotCode(player_A);
         sendBotCode(player_B);
 
+        // 等待是否检测到玩家AB的输入
         for (int i = 0;i < 50;i++){
             try {
                 Thread.sleep(100); // 睡100毫秒
@@ -302,16 +304,16 @@ public class Game extends Thread{
     }
 
     /**
-     * 判断蛇当前Step的有效性
+     * 判断蛇cellsA当前Step的有效性
      * @param cellsA
      * @param cellsB
      * @return
      */
     private boolean checkVaild(List<Cell> cellsA,List<Cell> cellsB){
         int n = cellsA.size();
-        Cell headA = cellsA.get(n-1);
-        if (this.walls[headA.x][headA.y] == 1) return false;
-
+        Cell headA = cellsA.get(n-1); // 蛇头
+        if (this.walls[headA.x][headA.y] == 1) return false; // 判断是否撞到了墙
+        // 判断是否撞到了自己 或者 撞到了 对方
         for (int i = 0;i < n-1;i++){
             if (cellsA.get(i).x == headA.x && cellsA.get(i).y == headA.y){
                 return false;
@@ -361,17 +363,17 @@ public class Game extends Thread{
     }
 
     /**
-     * 线程执行体
+     * 游戏线程 执行体
      */
     @Override
     public void run() {
         for (int i = 0; i < 1000;i++){
-            if (nextStep()){
-                judge();
-                if ("playing".equals(this.status)){
-                    sendMove();
+            if (nextStep()){ // 如果检测到两名玩家的下一步输入
+                judge(); // 判断是否合法
+                if ("playing".equals(this.status)){ // 游戏没有结束
+                    sendMove(); // 向前端发送 a b 的下一步操作
                 }else{
-                    sendResult();
+                    sendResult();  // 游戏结束
                     break;
                 }
             }else{

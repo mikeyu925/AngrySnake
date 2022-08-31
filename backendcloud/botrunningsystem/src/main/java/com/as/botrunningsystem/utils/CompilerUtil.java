@@ -3,9 +3,13 @@ package com.as.botrunningsystem.utils;
 import com.itranswarp.compiler.JavaStringCompiler;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
+/**
+ * 解决 Reflect.create 空指针问题，问题愿意，joor版本问题，该工具类已废弃
+ */
 public class CompilerUtil {
-    public static BotInterface generateClass(String className, String packageName, String javaCode) throws Exception {
+    public static Supplier<Integer> generateClass(String className, String packageName, String javaCode) throws Exception {
         // 声明包名
         String prefix = String.format("package %s;", packageName);
         // 全类名
@@ -17,7 +21,7 @@ public class CompilerUtil {
         // 加载内存中byte到Class<?>对象
         Class<?> clazz = compiler.loadClass(fullName, results);
         // 创建实例
-        BotInterface instance = (BotInterface)clazz.getDeclaredConstructor().newInstance();
+        Supplier<Integer> instance = (Supplier<Integer>)clazz.getDeclaredConstructor().newInstance();
 
         return instance;
     }

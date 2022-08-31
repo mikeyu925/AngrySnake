@@ -26,7 +26,7 @@ public class MatchingPool extends Thread{
 
     public void addPlayer(Integer userId, Integer rating,Integer botId) {
         lock.lock();
-        try { // Bug:已解决 new 对象时初始化打错了 ... 细心一点
+        try {
             players.add(new Player(userId, rating, botId,0));
         } finally {
             lock.unlock();
@@ -89,7 +89,7 @@ public class MatchingPool extends Thread{
      * 匹配匹配池中的所有玩家
      */
     private void matchPlayers(){
-        System.out.println("match players: " + players.toString());
+//        System.out.println("match players: " + players.toString());
 
         boolean [] used = new boolean[players.size()];
         // 越往后的元素越新

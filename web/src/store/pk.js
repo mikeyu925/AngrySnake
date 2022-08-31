@@ -34,7 +34,6 @@ export default {
             state.a_id = game.a_id;
             state.a_sx = game.a_sx;
             state.a_sy = game.a_sy;
-
             state.b_id = game.b_id;
             state.b_sx = game.b_sx;
             state.b_sy = game.b_sy;

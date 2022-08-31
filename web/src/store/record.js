@@ -18,6 +18,7 @@ export default {
         updateRecordLoser(state, loser) {
             state.record_loser = loser;
         }
+
     },
     actions: {},
     modules: {}

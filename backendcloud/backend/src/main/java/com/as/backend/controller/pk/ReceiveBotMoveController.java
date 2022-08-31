@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 
-
+/**
+ * 接收玩家bot移动方向并设置game种的bot的下一步方向
+ */
 @RestController
 public class ReceiveBotMoveController {
     @Autowired

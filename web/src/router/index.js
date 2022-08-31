@@ -12,7 +12,7 @@ import store from '@/store/index'
 const routes = [{
         path: "/",
         name: "home",
-        redirect: "/pk/", // 重定向，当输入根目录 localhost:8080时自动跳转至 pk 页面
+        redirect: "/pk/", // 重定向至 pk 页面
         meta: {
             requestAuth: true,
         }

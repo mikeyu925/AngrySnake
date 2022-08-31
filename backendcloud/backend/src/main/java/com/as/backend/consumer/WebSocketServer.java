@@ -87,15 +87,12 @@ public class WebSocketServer {
     }
 
     public static void startGame(Integer aId,Integer aBotId,Integer bId,Integer bBotId){
+        // 获取玩家
         User a = userMapper.selectById(aId);
         User b = userMapper.selectById(bId);
-        System.out.println("aBotId :" + aBotId);
-        System.out.println("bBotId :" + bBotId);
+        // 获取snake
         Snake snakeA = snakeMapper.selectById(aBotId);
         Snake snakeB = snakeMapper.selectById(bBotId);
-
-        System.out.println("SnakeA: " + snakeA);
-        System.out.println("SnakeB: " + snakeB);
 
         // 创建地图 并添加至对应用户的链接中
         Game game = new Game(
@@ -106,7 +103,6 @@ public class WebSocketServer {
                 snakeA,
                 b.getId(),
                 snakeB);
-
         game.createGameMap();
         if (users.get(a.getId()) != null)
             users.get(a.getId()).game = game;
@@ -143,7 +139,7 @@ public class WebSocketServer {
         if (users.get(b.getId()) != null)
             users.get(b.getId()).sendMessage(respB.toJSONString());
 
-        System.out.println(a.getUsername() + " matching with " + b.getUsername() + " successfully!");
+//        System.out.println(a.getUsername() + " matching with " + b.getUsername() + " successfully!");
     }
 
     /**
