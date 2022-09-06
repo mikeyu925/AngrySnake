@@ -1,9 +1,11 @@
 <template>
     <ContentField>
         <PlayGround v-if="$store.state.pk.status === 'playing'" />
-        <SnakeinfoBoard v-if="$store.state.pk.status === 'playing'" />
+        <!-- <SnakeinfoBoard v-if="$store.state.pk.status === 'playing'" /> -->
         <MatchGround v-if="$store.state.pk.status === 'matching'" />
         <ResultBoard v-if="$store.state.pk.loser != 'none'"/>
+        <div class="user-color" v-if="$store.state.pk.status === 'playing' && parseInt($store.state.user.id) === parseInt($store.state.pk.a_id)">左下角</div>
+        <div class="user-color" v-if="$store.state.pk.status === 'playing' && parseInt($store.state.user.id) === parseInt($store.state.pk.b_id)">右上角</div>
     </ContentField>
 </template>
 
@@ -11,7 +13,7 @@
 import PlayGround from '../../components/PlayGround.vue'
 import MatchGround from '../../components/MatchGround.vue'
 import ResultBoard from '../../components/ResultBoard.vue'
-import SnakeinfoBoard from '../../components/SnakeinfoBoard.vue'
+// import SnakeinfoBoard from '../../components/SnakeinfoBoard.vue'
 import ContentField from '../../components/ContentField.vue'
 import {onMounted,onUnmounted} from 'vue'
 import {useStore} from 'vuex'
@@ -23,13 +25,12 @@ export default{
         PlayGround,
         MatchGround,
         ResultBoard,
-        SnakeinfoBoard,
+        // SnakeinfoBoard,
         ContentField,
     },
     setup() {
         const store = useStore();
         const socketUrl = `wss://app3235.acapp.acwing.com.cn/websocket/${store.state.user.token}/`;
-        // const socketUrl = `ws://127.0.0.1:6969/websocket/${store.state.user.token}/`;
         store.commit("updateLoser","none");
         store.commit("updateIsRecord",false);
 
@@ -45,7 +46,7 @@ export default{
             socket = new WebSocket(socketUrl);
             // onopen 链接成功建立时执行
             socket.onopen = () =>{
-                console.log("connected !!!");
+                // console.log("connected !!!");
                 store.commit("updateSocket",socket);
             }
 
@@ -70,7 +71,7 @@ export default{
                     snake0.set_direction(data.a_direction);
                     snake1.set_direction(data.b_direction);
                 }else if(data.event === "result"){
-                    console.log(data);
+                    // console.log(data);
                     const game = store.state.pk.gameObject;
                     const [snake0,snake1] = game.snakes;
                     if(data.loser === "all" || data.loser === "A"){
@@ -86,7 +87,6 @@ export default{
             }
             // onclose 链接关闭时执行
             socket.onclose = () =>{
-                console.log("disconnected !!!");
             }
         });
         // 组件被解除挂载时执行 onUnmounted (组件被解除挂载 == 页面被关闭？)
@@ -107,5 +107,11 @@ div.user-color{
     color:white;
     font-size: 30px;
     font-weight: 600;
+}
+div.user-color{
+    position: absolute;
+    bottom: 5vh;
+    width: 100%;
+    text-align: center;
 }
 </style>

@@ -70,7 +70,7 @@ export default{
     }
 
     div.menu-item:hover{
-        scale: 1.3;
+        transform: scale(1.3);
         transition: 200ms;
     }
 </style>
