@@ -6,6 +6,9 @@
     <!-- <a class="navbar-brand" href="/">Angry Snake</a> -->
     <!-- 将<a> 标签替换为 <router-link> 可以防止页面刷新（单页面应用） -->
     <router-link class="navbar-brand" :to="{name:'home'}">Angry Snake</router-link>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">

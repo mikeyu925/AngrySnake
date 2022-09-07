@@ -20,8 +20,10 @@ import RecordIndexView from './views/record/RecordIndexView.vue'
 import RecordContentView from './views/record/RecordContentView.vue'
 import RankListIndexView from './views/ranklist/RankListIndexView.vue'
 import UserSnakeView from './views/user/snake/UserSnakeView.vue'
+import $ from 'jquery'
 
-// js
+
+
 export default{
   components:{
     MenuView,
@@ -33,23 +35,43 @@ export default{
   },
   setup(){
     const store = useStore();
+    // {  apply_code 示例
+    // "result": "success",
+    // "appid": "3235",
+    // "scope": "userinfo",
+    // "redirect_uri": "https%3A%2F%2Fapp3235.acapp.acwing.com.cn%2Fapi%2Fuser%2Faccount%2Facwing%2Facapp%2Freceive_code%2F",
+    // "state": "6107487011"
+    // }
     // 获取token信息
-    // const jwt_token = localStorage.getItem("jwt_token");
-    const jwt_token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJhYjBkZDYwM2NkMjM0NDM4YjVhOWZmNDFlMWY3MGQ5MiIsInN1YiI6IjEiLCJpc3MiOiJzZyIsImlhdCI6MTY2MTgzODYyOSwiZXhwIjoxNjYzMDQ4MjI5fQ.JeEUoDfMsB5T8KbfDS1UfYVqzURZfXFtjo9J0Jk7Kos";
-    if(jwt_token){
-        store.commit("updateToken",jwt_token);
-        // 从云端获取信息
-        store.dispatch("getinfo",{
-            success(){
-                store.commit("updatePullingInfo",false);
-            },
-            error(){
-                store.commit("updatePullingInfo",false);
+    $.ajax({
+      url: "https://app3235.acapp.acwing.com.cn/api/user/account/acwing/acapp/apply_code/",
+      type: "GET",
+      success : resp =>{
+        if(resp.result === "success"){
+          // 申请授权登录
+          const jwt_token = resp.jwt_token;
+          store.commit("updateToken", jwt_token);
+          store.state.user.AcWingOS.api.oauth2.authorize(resp.appid, resp.redirect_uri, resp.scope, resp.state, resp=>{
+            if (resp.result === "success") {
+              const jwt_token = resp.jwt_token;
+              store.commit("updateToken", jwt_token);
+              store.dispatch("getinfo", {
+                  success() {
+                      store.commit("updatePullingInfo", false);
+                  },
+                  error() {
+                      store.commit("updatePullingInfo", false);
+                  }
+              })
+            } else {
+              store.state.user.AcWingOS.api.window.close();
             }
-        })
-    }else{
-        store.commit("updatePullingInfo",false);
-    }
+          });
+        }else{
+          store.state.user.AcWingOS.api.window.close();
+        }
+      }
+    });
   }
 }
 </script>
