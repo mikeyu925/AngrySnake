@@ -91,7 +91,7 @@ localStorage.setItem("jwt_token", resp.token);
   - 建立地图
   - 将地图、对手信息分别传给Client浏览器
 
-![image-20220818151308693](readme.assets/image-20220818151308693.png)
+![项目架构](readme.assets/项目架构.jpg)
 
 ### 代码执行微服务
 

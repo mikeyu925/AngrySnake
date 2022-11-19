@@ -64,7 +64,7 @@ public class Consumer extends Thread{
                 addUid(bot.getBotCode(), uid)
         ).create().get();
 
-        System.out.println(bot.getUserId() + " : " + bot.getInput());
+//        System.out.println(bot.getUserId() + " : " + bot.getInput());
 
 
         File file = new File("input.txt");
@@ -83,59 +83,4 @@ public class Consumer extends Thread{
         // 发送至后端 ReceiveBotMoveController
         restTemplate.postForObject(receiveBotMoveUrl, data, String.class);
     }
-
-    /** 废弃
-
-     @Override
-     public void run() {
-     UUID uuid = UUID.randomUUID();
-     String uid = uuid.toString().substring(0,8);
-     String code = addUid(bot.getBotCode(),uid);
-     // 创建这个类
-     createFile("Bot" + uid,code);
-     try{
-     Supplier<Integer> botInterface = CompilerUtil.generateClass("Bot" + uid, "com.kob.botrunningsystem.utils", code);
-
-     File file = new File("input.txt");
-     try(PrintWriter fout = new PrintWriter(file)) {
-     fout.println(bot.getInput());
-     fout.flush();
-     }catch (FileNotFoundException fe){
-     fe.printStackTrace();
-     }
-
-     Integer direction = botInterface.get();
-     System.out.println(bot.getUserId() + " move-dir : " + direction);
-
-     MultiValueMap<String ,String> data = new LinkedMultiValueMap<>();
-     data.add("user_id",bot.getUserId().toString());
-     data.add("direction",direction.toString());
-     deleteFile("Bot" + uid);
-
-     restTemplate.postForObject(receiveBotMoveUrl,data,String.class);
-     }catch (Exception e){
-     e.printStackTrace();
-     }
-
-     }
-    private void deleteFile(String name) {
-        // 这个路径是自己写的，自己定义即可
-        File file = new File("F:\\Java\\JavaProjects\\AngrySnake\\backendcloud\\botrunningsystem/src/main/java/com/as/botrunningsystem/utils/" + name + ".java");
-        if (file.exists()) {
-            System.out.println("----");
-            file.delete();
-        }
-    }
-
-    private void createFile(String name, String code) {
-        try (FileWriter file = new FileWriter("F:\\Java\\JavaProjects\\AngrySnake\\backendcloud\\botrunningsystem/src/main/java/com/as/botrunningsystem/utils/" + name + ".java");) {
-            file.write(code);
-            file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-     **/
-
 }

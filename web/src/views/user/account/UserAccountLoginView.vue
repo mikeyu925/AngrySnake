@@ -38,6 +38,7 @@ export default{
     let username = ref('');
     let password = ref('');
     let error_message = ref('');
+
     // 获取token信息
     const jwt_token = localStorage.getItem("jwt_token");
     if(jwt_token){
@@ -56,6 +57,8 @@ export default{
     }else{
         store.commit("updatePullingInfo",false);
     }
+
+    // 登录
     const login = () => {
         error_message.value = "";
         store.dispatch("login",{
@@ -77,6 +80,7 @@ export default{
         })
     }
 
+    // Acwing第三方登录
     const acwing_login = () =>{
         $.ajax({
             url : "https://app3235.acapp.acwing.com.cn/api/user/account/acwing/web/apply_code/",
@@ -96,6 +100,7 @@ export default{
         login,
         acwing_login,
     }
+    
   }
 }
 </script>

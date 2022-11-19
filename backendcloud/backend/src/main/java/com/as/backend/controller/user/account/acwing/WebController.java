@@ -13,7 +13,7 @@ import java.util.Map;
 public class WebController {
     @Autowired
     private WebService webService;
-
+    // 接收到了web端请求，
     @GetMapping("/api/user/account/acwing/web/apply_code/")
     public JSONObject applyCode() {
         return webService.applyCode();

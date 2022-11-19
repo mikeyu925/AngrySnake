@@ -67,7 +67,7 @@ public class WebSocketServer {
         int userId = JwtAuthentication.getUserId(token);
         this.user = userMapper.selectById(userId);
 
-        System.out.println(this.user.getUsername() + " connected !!!");
+//        System.out.println(this.user.getUsername() + " connected !!!");
         if (this.user != null){
             users.put(userId,this);
         }else{
@@ -146,10 +146,10 @@ public class WebSocketServer {
      * 开始匹配
      **/
     private void startMatching(Integer botId){
-        System.out.println("start matching!");
+//        System.out.println("start matching!");
         MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
-        data.add("user_id",this.user.getId().toString());
-        data.add("rating",this.user.getRating().toString());
+        data.add("user_id",this.user.getId().toString()); // 获得当前用户id
+        data.add("rating",this.user.getRating().toString()); // 获得当前用户排名
         data.add("bot_id",botId.toString());
         restTemplate.postForObject(addPlayerUrl,data,String.class);
     }
@@ -158,7 +158,7 @@ public class WebSocketServer {
      * 取消匹配
      */
     private void stopMatching(){
-        System.out.println("stop matching");
+//        System.out.println("stop matching");
         MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
         data.add("user_id",this.user.getId().toString());
         restTemplate.postForObject(removePlayerUrl,data,String.class);
