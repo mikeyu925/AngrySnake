@@ -173,7 +173,7 @@ import ace from 'ace-builds';
       const refresh_snakes = () =>{
         $.ajax({
           // url: "http://127.0.0.1:6969/api/user/snake/getlist/",
-          url: "https://app3235.acapp.acwing.com.cn/api/user/snake/getlist/",
+          url: "https://app3272.acapp.acwing.com.cn/api/user/snake/getlist/",
           type: "get",
           headers: {
               Authorization: "Bearer " + store.state.user.token, // 验证的 token
@@ -191,7 +191,7 @@ import ace from 'ace-builds';
         snakeadd.error_message = "";
         $.ajax({
           // url: "http://127.0.0.1:6969/api/user/snake/add/",
-          url: "https://app3235.acapp.acwing.com.cn/api/user/snake/add/",
+          url: "https://app3272.acapp.acwing.com.cn/api/user/snake/add/",
           type: "POST",
           data:{
             title: snakeadd.title,
@@ -229,7 +229,7 @@ import ace from 'ace-builds';
       const remova_snake = (snake) => {
         $.ajax({
           // url: "http://127.0.0.1:6969/api/user/snake/remove/",
-          url: "https://app3235.acapp.acwing.com.cn/api/user/snake/remove/",
+          url: "https://app3272.acapp.acwing.com.cn/api/user/snake/remove/",
           type: "POST",
           data:{
             snake_id: snake.id,
@@ -249,7 +249,7 @@ import ace from 'ace-builds';
       const update_snake = (snake) => {
         $.ajax({
           // url: "http://127.0.0.1:6969/api/user/snake/update/",
-          url: "https://app3235.acapp.acwing.com.cn/api/user/snake/update/",
+          url: "https://app3272.acapp.acwing.com.cn/api/user/snake/update/",
           type: "POST",
           data:{
             snake_id : snake.id,

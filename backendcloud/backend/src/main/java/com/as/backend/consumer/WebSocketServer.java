@@ -35,7 +35,6 @@ public class WebSocketServer {
     private final static String addPlayerUrl = "http://127.0.0.1:3000/player/add/";
     private final static String removePlayerUrl = "http://127.0.0.1:3000/player/remove/";
 
-
     public static UserMapper userMapper;
     public  static RecordMapper recordMapper;
     private static SnakeMapper snakeMapper;
@@ -67,7 +66,6 @@ public class WebSocketServer {
         int userId = JwtAuthentication.getUserId(token);
         this.user = userMapper.selectById(userId);
 
-//        System.out.println(this.user.getUsername() + " connected !!!");
         if (this.user != null){
             users.put(userId,this);
         }else{

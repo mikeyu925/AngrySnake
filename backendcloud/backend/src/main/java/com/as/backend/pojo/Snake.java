@@ -16,7 +16,7 @@ public class Snake {
     @TableId(type = IdType.AUTO)
     private Integer id;  // 主键自增
     private Integer userId; // 数据库: user_id 后端：userId(驼峰)
-    private String title;
+    private String title;   //
     private String description;
     private String content;
     @JsonFormat(pattern = "yyyy-MM-d HH:mm:ss",timezone = "Asia/Shanghai")

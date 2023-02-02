@@ -11,7 +11,7 @@ public class BotPool extends Thread{
     private final Queue<Bot> bots = new LinkedList<>();
 
     /**
-     * 像botpool加入一个bot
+     * 像 botpool加入一个 bot
      * @param userId
      * @param botCode
      * @param input

@@ -54,7 +54,7 @@
 
 <style scoped>
     div.info-board{
-        height: 45vh;
+        height: 60vh;
         width: 14vw;
         background-color: wheat;
         position: absolute;

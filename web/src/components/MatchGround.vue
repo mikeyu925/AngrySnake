@@ -75,7 +75,7 @@ export default {
         const refresh_snakes = () =>{
         $.ajax({
         //   url: "http://127.0.0.1:6969/api/user/snake/getlist/",
-          url: "https://app3235.acapp.acwing.com.cn/api/user/snake/getlist/",
+          url: "https://app3272.acapp.acwing.com.cn/api/user/snake/getlist/",
           type: "get",
           headers: {
               Authorization: "Bearer " + store.state.user.token, // 验证的 token

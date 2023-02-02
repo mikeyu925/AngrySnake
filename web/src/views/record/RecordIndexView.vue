@@ -103,7 +103,7 @@ export default{
         current_page = page;
         $.ajax({
           // url: "http://127.0.0.1:6969/api/record/getlist/",
-          url: "https://app3235.acapp.acwing.com.cn/api/record/getlist/",
+          url: "https://app3272.acapp.acwing.com.cn/api/record/getlist/",
           data:{
             page,
           },

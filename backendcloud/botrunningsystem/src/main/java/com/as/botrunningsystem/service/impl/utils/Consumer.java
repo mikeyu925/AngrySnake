@@ -64,8 +64,6 @@ public class Consumer extends Thread{
                 addUid(bot.getBotCode(), uid)
         ).create().get();
 
-//        System.out.println(bot.getUserId() + " : " + bot.getInput());
-
 
         File file = new File("input.txt");
         try (PrintWriter fout = new PrintWriter(file)) {

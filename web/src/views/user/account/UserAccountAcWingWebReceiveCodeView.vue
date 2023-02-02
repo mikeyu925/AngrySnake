@@ -16,7 +16,7 @@ export default {
         const store = useStore();
 
         $.ajax({
-            url: "https://app3235.acapp.acwing.com.cn/api/user/account/acwing/web/receive_code/",
+            url: "https://app3272.acapp.acwing.com.cn/api/user/account/acwing/web/receive_code/",
             type: "GET",
             data: {
                 code: myRoute.query.code,
