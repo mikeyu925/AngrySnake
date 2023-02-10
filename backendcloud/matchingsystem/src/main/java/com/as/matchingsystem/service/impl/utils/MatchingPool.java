@@ -89,7 +89,6 @@ public class MatchingPool extends Thread{
      * 匹配匹配池中的所有玩家
      */
     private void matchPlayers(){
-//        System.out.println("match players: " + players.toString());
 
         boolean [] used = new boolean[players.size()];
         // 越往后的元素越新

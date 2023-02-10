@@ -35,6 +35,7 @@ public class WebSocketServer {
     private final static String addPlayerUrl = "http://127.0.0.1:3000/player/add/";
     private final static String removePlayerUrl = "http://127.0.0.1:3000/player/remove/";
 
+    // 单例？
     public static UserMapper userMapper;
     public  static RecordMapper recordMapper;
     private static SnakeMapper snakeMapper;
@@ -194,7 +195,7 @@ public class WebSocketServer {
     }
 
     /**
-     * 从后端发送信息
+     * 从后端发送信息 给客户端
      * @param message
      */
     public void sendMessage(String message) {
